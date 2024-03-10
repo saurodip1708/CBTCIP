@@ -1,61 +1,40 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
-#define MAX_FILENAME_LENGTH 100
-
-void countWordsLinesChars(char *filename, int *words, int *lines, int *chars) {
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        printf("Error: Unable to open the file %s\n", filename);
-        return;
-    }
-
-    int inWord = 0;
-    *words = 0;
-    *lines = 0;
-    *chars = 0;
-
-    char c;
-    while ((c = fgetc(file)) != EOF) {
-        (*chars)++;
-        if (c == '\n') {
-            (*lines)++;
-            inWord = 0;
-        } else if (isspace(c)) {
-            inWord = 0;
-        } else if (!inWord) {
-            (*words)++;
-            inWord = 1;
-        }
-    }
-
-    if (inWord) {
-        (*words)++;
-    }
-
-    if (*chars > 0) {
-        (*lines)++;
-    }
-
-    fclose(file);
-}
+#define max_file_len 1000
+#define max_file_name_len 100
 
 int main() {
-    char filename[MAX_FILENAME_LENGTH];
-    int words, lines, chars;
+FILE *file;
+char line[max_file_len];
+    char file_name[max_file_name_len];
+int word_count = 0;
+int in_word = 0;
+  
+printf("Enter the name of the text file: ");
+    fgets(file_name, max_file_name_len, stdin);
+file_name[strcspn(file_name, "\n")] = '\0'; 
 
-    printf("Enter the filename: ");
-    fgets(filename, MAX_FILENAME_LENGTH, stdin);
-    filename[strcspn(filename, "\n")] = '\0'; // Remove newline character
 
-    countWordsLinesChars(filename, &words, &lines, &chars);
-
-    printf("\nFile Statistics:\n");
-    printf("Words: %d\n", words);
-    printf("Lines: %d\n", lines);
-    printf("Characters: %d\n", chars);
-
-    return 0;
+ file = fopen(file_name, "r");
+    if (file == NULL) {
+     printf("Error opening file '%s'.\n", file_name);
+return 1;
+    }    
+while (fgets(line, max_file_len, file) != NULL) {
+        int i;
+  for (i = 0; i < strlen(line); i++) {
+    if (line[i] == ' ' || line[i] == '\t' || line[i] == '\n') {
+             in_word = 0;
+    } else {
+      if (!in_word) {
+     word_count++;
+            in_word = 1;
+         }
+         }
+     }
+    }
+ fclose(file);    
+ printf("The number of words in the file '%s' is: %d\n", file_name, word_count);
+return 0;
 }

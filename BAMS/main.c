@@ -1,29 +1,22 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
 #define max_acc 100
 #define max_name_len 50
 #define max_pass_len 20
-
-// Account types
 #define SAVINGS 1
-#define CHECKING 2
-
-// Interest rates
+#define CURRENT 2
 #define SAVINGS_INTEREST_RATE 0.03
-#define CHECKING_INTEREST_RATE 0.01
+#define CURRENT_INTEREST_RATE 0.01
 
-// Account structure
 typedef struct {
-    int accountNumber;
-    char name[max_name_len];
-    char password[max_pass_len];
-    int accountType;
-    double balance;
+ int accountNumber;
+char name[max_name_len];
+char password[max_pass_len];
+int accountType;
+ double balance;
 } Account;
 
-// Global variables
 Account accounts[max_acc];
 int numAccounts = 0;
 int loggedInAccount = -1;
@@ -43,20 +36,19 @@ int main() {
 
     while (1) {
         if (loggedInAccount == -1) {
-            printf("\nBank Account Management System\n");
-            printf("1. Login\n");
+printf("\nBank Account Management System\n");
+ printf("1. Login\n");
             printf("2. Create Account\n");
-            printf("3. Exit\n");
-            printf("Enter your choice: ");
+          printf("3. Exit\n");
+                    printf("Enter your choice: ");
             scanf("%d", &choice);
 
             switch (choice) {
                 case 1:
                     login();
                     break;
-                case 2:
-                    createAccount();
-                    break;
+                    case 2: createAccount();
+             break;
                 case 3:
                     return 0;
                 default:
@@ -149,10 +141,10 @@ void createAccount() {
     printf("Enter password: ");
     scanf("%s", newAccount.password);
 
-    printf("Enter account type (1 for Savings, 2 for Checking): ");
+    printf("Enter account type (1 for Savings, 2 for Cureent Account): ");
     scanf("%d", &newAccount.accountType);
 
-    printf("Enter initial balance: ");
+    printf("Enter Opening balance: ");
     scanf("%lf", &newAccount.balance);
 
     newAccount.accountNumber = numAccounts + 1;
@@ -177,54 +169,54 @@ void deposit(int accountNumber) {
 }
 
 void withdraw(int accountNumber) {
-    int index = findAccount(accountNumber);
+int index = findAccount(accountNumber);
 
-    if (index == -1) {
-        printf("Account not found.\n");
+if (index == -1) {
+    printf("Account not found.\n");
         return;
-    }
+ }
 
     double amount;
-    printf("Enter amount to withdraw: ");
+ printf("Enter amount to withdraw: ");
     scanf("%lf", &amount);
 
     if (amount > accounts[index].balance) {
-        printf("Insufficient balance.\n");
+     printf("Insufficient balance.\n");
         return;
     }
 
-    accounts[index].balance -= amount;
-    printf("Withdrawal successful. New balance: %.2f\n", accounts[index].balance);
+accounts[index].balance -= amount;
+printf("Withdrawal successful. New balance: %.2f\n", accounts[index].balance);
 }
 
 void checkBalance(int accountNumber) {
-    int index = findAccount(accountNumber);
+int index = findAccount(accountNumber);
 
-    if (index == -1) {
-        printf("Account not found.\n");
-        return;
-    }
+ if (index == -1) {
+ printf("Account not found.\n");
+return;
+}
 
-    printf("Account Balance: %.2f\n", accounts[index].balance);
+printf("Account Balance: %.2f\n", accounts[index].balance);
 }
 
 void calculateInterest(int accountNumber) {
-    int index = findAccount(accountNumber);
+int index = findAccount(accountNumber);
 
-    if (index == -1) {
-        printf("Account not found.\n");
-        return;
+if (index == -1) {
+printf("Account not found.\n");
+return;
     }
 
-    double interestRate;
-    if (accounts[index].accountType == SAVINGS) {
-        interestRate = SAVINGS_INTEREST_RATE;
-    } else if (accounts[index].accountType == CHECKING) {
-        interestRate = CHECKING_INTEREST_RATE;
-    } else {
-        printf("Invalid account type.\n");
-        return;
-    }
+ double interestRate;
+if (accounts[index].accountType == SAVINGS) {
+interestRate = SAVINGS_INTEREST_RATE;
+} else if (accounts[index].accountType == CURRENT) {
+      interestRate = CURRENT_INTEREST_RATE;
+} else {
+printf("Invalid account type.\n");
+return;
+}
 
     double interest = accounts[index].balance * interestRate;
     printf("Interest earned: %.2f\n", interest);
